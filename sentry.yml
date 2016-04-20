@@ -1,0 +1,14 @@
+version: '2'
+services:
+  sentry:
+    environment:
+      - SENTRY_DB_USER=sentry
+      - SENTRY_POSTGRES_HOST=postgres
+      - SENTRY_DB_PASSWORD=postgres-password
+      - SENTRY_SECRET_KEY=secretkey-bf_2febs_9hn_!01%2ah8h!q0km(gw+zw#e73t0^-787
+      - SENTRY_EMAIL_USER=ma_daemon
+      - SENTRY_SERVER_EMAIL=example@exampmle.com
+      - SENTRY_EMAIL_PORT=25
+      - SENTRY_EMAIL_PASSWORD=passsword
+      - SENTRY_REDIS_HOST=redis
+      - SENTRY_EMAIL_HOST=example.com

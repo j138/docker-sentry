@@ -1,0 +1,72 @@
+version: '2'
+services:
+  redis:
+    image: redis
+    volumes:
+      - redis-data:/var/lib/redis
+    restart: always
+    networks:
+      - back-tier
+  
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=zm4Pd1qJ
+      - POSTGRES_USER=sentry
+    volumes:
+      - postgres-data:/var/lib/postgresql
+    restart: always
+    networks:
+      - back-tier
+  
+  sentry:
+    image: sentry
+    extends: 
+      file: sentry.yml
+      service: sentry
+    volumes:
+      - sentry-data:/var/lib/sentry/files
+    restart: always
+    ports:
+      - "80:9000"
+    networks:
+      - front-tier
+      - back-tier
+  
+  celery-beat:
+    image: sentry
+    extends: 
+      file: sentry.yml
+      service: sentry
+    volumes:
+      - sentry-data:/var/lib/sentry/files
+    restart: always
+    command: sentry celery beat
+    networks:
+      - back-tier
+  
+  celery-worker:
+    image: sentry
+    extends: 
+      file: sentry.yml
+      service: sentry
+    volumes:
+      - sentry-data:/var/lib/sentry/files
+    restart: always
+    command: sentry celery worker
+    networks:
+      - back-tier
+
+volumes:
+  postgres-data:
+    driver: local
+  redis-data:
+    driver: local
+  sentry-data:
+    driver: local
+
+networks:
+  front-tier:
+    driver: bridge
+  back-tier:
+    driver: bridge
